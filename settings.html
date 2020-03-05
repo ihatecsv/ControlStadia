@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <style>
+            body {
+                width: 200px;
+                text-align: center;
+                margin: 0;
+            }
+            input {
+                width: 80%;
+            }
+            .logo-container {
+                margin-bottom: 4px;
+                color: #ffffff;
+                background-color: #2ab5ff;
+                padding: 10px;
+            }
+            .option {
+                margin-bottom: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="logo-container">
+            <img src="img/cs-text-64.png">
+            <span id="version">?.?.?</span>
+        </div>
+        <div id="first-run-notification">
+            If you already have Stadia open, you must refresh the window before ControlStadia will function.
+            <button type="button" id="first-run-notification-close-button">I understand</button>
+        </div>
+        <div id="settings">
+            <div class="option">
+                <label for="apply-button">Apply changes (causes refresh)</label>
+                <button type="button" id="apply-button">Apply</button>
+            </div>
+        </div>
+        <script src="settings.js"></script>
+    </body>
+</html>
