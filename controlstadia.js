@@ -6,6 +6,10 @@ function main(){
 	}, false);
 	const setupCS = function(){
 		console.log("ControlStadia: Injected!");
+
+		const buttonCount = 17;
+		const axisCount = 4;
+
 		const emulatedGamepad = {
 			id: "ControlStadia emulated gamepad",
 			index: 0,
@@ -13,59 +17,62 @@ function main(){
 			timestamp: 0,
 			mapping: "standard",
 			axes: [0, 0, 0, 0],
-			buttons: []
+			buttons: new Array(buttonCount).fill().map(m => ({pressed: false, touched: false, value: 0}))
 		}
+		
+		let indicesFound = false;
+		const findGamepadIndices = function(originalGamepads){
+			for(let i = 0; i < buttonCount; i++){
+				if(typeof config.buttons[i].dstID !== "undefined"){
+					for(let gamepadIndex = 0; gamepadIndex < originalGamepads.length; gamepadIndex++){
+						if(originalGamepads[gamepadIndex] !== null && originalGamepads[gamepadIndex].id === config.buttons[i].dstID){
+							config.buttons[i].gamepadIndex = gamepadIndex;
+							break;
+						}
+					}
+				}
+			}
+			for(let i = 0; i < axisCount; i++){
+				if(typeof config.axes[i].dstID !== "undefined"){
+					for(let gamepadIndex = 0; gamepadIndex < originalGamepads.length; gamepadIndex++){
+						if(originalGamepads[gamepadIndex] !== null && originalGamepads[gamepadIndex].id === config.axes[i].dstID){
+							config.axes[i].gamepadIndex = gamepadIndex;
+							break;
+						}
+					}
+				}
+			}
+			console.log("ControlStadia: Gamepad indicies found!");
+			indicesFound = true;
+		}
+		
 		const originalGetGamepads = navigator.getGamepads;
 		navigator.getGamepads = function(){ // The magic happens here
 			const originalGamepads = originalGetGamepads.apply(navigator);
-			for(let i = 0; i < 17; i++){
-				if(typeof config.buttons[i].dstID !== "undefined"){
-					let found = false;
-					let gamepadID;
-					for(gamepadID = 0; gamepadID < originalGamepads.length; gamepadID++){
-						if(originalGamepads[gamepadID] !== null && originalGamepads[gamepadID].id === config.buttons[i].dstID){
-							found = true;
-							break;
-						}
-					}
-					if(found){
-						if(config.buttons[i].dstType){ //Axis
-							emulatedGamepad.buttons[i] = {
-								"pressed": originalGamepads[gamepadID].axes[config.buttons[i].dstIndex] !== 0,
-								"touched": originalGamepads[gamepadID].axes[config.buttons[i].dstIndex] !== 0,
-								"value": originalGamepads[gamepadID].axes[config.buttons[i].dstIndex]
-							}
-						}else{ //Button
-							emulatedGamepad.buttons[i] = originalGamepads[gamepadID].buttons[config.buttons[i].dstIndex];
-						}
-						emulatedGamepad.timestamp = originalGamepads[gamepadID].timestamp;
-					}else{
-						emulatedGamepad.buttons[i] = {pressed: false, touched: false, value: 0};
-					}
-				}else{
-					emulatedGamepad.buttons[i] = {pressed: false, touched: false, value: 0};
-				}
+			if(!indicesFound){
+				const gamepadFound = Array.from(originalGamepads).some(gamepad => gamepad !== null);
+				if(gamepadFound) findGamepadIndices(originalGamepads);
 			}
-
-			for(let i = 0; i < 4; i++){
-				if(typeof config.axes[i].dstID !== "undefined"){
-					let found = false;
-					let gamepadID;
-					for(gamepadID = 0; gamepadID < originalGamepads.length; gamepadID++){
-						if(originalGamepads[gamepadID] !== null && originalGamepads[gamepadID].id === config.axes[i].dstID){
-							found = true;
-							break;
-						}
-					}
-					if(found){
-						emulatedGamepad.axes[i] = originalGamepads[gamepadID].axes[config.axes[i].dstIndex];
-						emulatedGamepad.timestamp = originalGamepads[gamepadID].timestamp;
-					}else{
-						emulatedGamepad.axes[i] = 0;
-					}
-				}else{
-					emulatedGamepad.axes[i] = 0;
+			for(let i = 0; i < 17; i++){
+				const selectedConfigButton = config.buttons[i];
+				if(typeof selectedConfigButton.gamepadIndex === "undefined") continue;
+				const gamepadIndex = selectedConfigButton.gamepadIndex;
+				const dstIndex = selectedConfigButton.dstIndex;
+				if(selectedConfigButton.dstType){ //Axis
+					const button = emulatedGamepad.buttons[i];
+					button.pressed = button.touched = originalGamepads[gamepadIndex].axes[dstIndex] !== 0;
+					button.value = originalGamepads[gamepadIndex].axes[dstIndex];
+				}else{ //Button
+					emulatedGamepad.buttons[i] = originalGamepads[gamepadIndex].buttons[dstIndex];
 				}
+				emulatedGamepad.timestamp = originalGamepads[gamepadIndex].timestamp;
+			}
+			for(let i = 0; i < 4; i++){
+				const selectedConfigAxis = config.axes[i];
+				if(typeof selectedConfigAxis.gamepadIndex === "undefined") continue;
+				const gamepadIndex = selectedConfigAxis.gamepadIndex;
+				emulatedGamepad.axes[i] = originalGamepads[gamepadIndex].axes[selectedConfigAxis.dstIndex];
+				emulatedGamepad.timestamp = originalGamepads[gamepadIndex].timestamp;
 			}
 			return [emulatedGamepad, null, null, null];
 		}
