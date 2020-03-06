@@ -6,7 +6,7 @@ const settingsElem = document.getElementById("settings");
 const applyButtonElem = document.getElementById("apply-button");
 const gamepadRefreshButtonElem = document.getElementById("gamepad-refresh-button");
 const gamepadSelectElem = document.getElementById("gamepad-select");
-const buttonListElem = document.getElementById("button-list");
+const controlListElem = document.getElementById("control-list");
 
 const axes = [
     {label: "LX"}, //0
@@ -85,39 +85,39 @@ const awaitInputToSet = function(srcType, srcIndex, buttonLabelElem){
     }, 200);
 }
 
-const populateButtonList = function(){
-    buttonListElem.innerHTML = "";
-    for(let i = 0; i < buttons.length; i++){
-        const buttonButtonElem = document.createElement("button");
-        buttonButtonElem.innerHTML = buttons[i].label;
-        const buttonLabelElem = document.createElement("span");
-        buttonLabelElem.innerHTML = "[Unset]";
-        const breakElem = document.createElement("br");
-        buttonListElem.appendChild(buttonButtonElem);
-        buttonListElem.appendChild(buttonLabelElem);
-        buttonListElem.appendChild(breakElem);
-        buttonButtonElem.onclick = function(){
-            buttonLabelElem.innerHTML = "[Press button/move axis]";
-            awaitInputToSet(0, i, buttonLabelElem);
+const populateControlList = function(){
+    controlListElem.innerHTML = "";
+    const createControl = function(type, index){
+        const trElem = document.createElement("tr");
+
+        const controlButtonElem = document.createElement("button");
+        const controlButtonTdElem = document.createElement("td");
+        controlButtonElem.innerHTML = (type ? axes : buttons)[index].label;
+        controlButtonTdElem.appendChild(controlButtonElem);
+
+        const controlLabelElem = document.createElement("span");
+        const controlLabelTdElem = document.createElement("td");
+        controlLabelElem.innerHTML = "[Unset]";
+        controlLabelTdElem.appendChild(controlLabelElem);
+
+        trElem.appendChild(controlButtonTdElem);
+        trElem.appendChild(controlLabelTdElem)
+        controlListElem.appendChild(trElem);
+        
+        controlButtonElem.onclick = function(){
+            controlLabelElem.innerHTML = "[Setting...]";
+            awaitInputToSet(type, index, controlLabelElem);
         }
+    }
+    for(let i = 0; i < buttons.length; i++){
+        createControl(0, i);
     }
     for(let i = 0; i < axes.length; i++){
-        const buttonButtonElem = document.createElement("button");
-        buttonButtonElem.innerHTML = axes[i].label;
-        const buttonLabelElem = document.createElement("span");
-        buttonLabelElem.innerHTML = "[Unset]";
-        const breakElem = document.createElement("br");
-        buttonListElem.appendChild(buttonButtonElem);
-        buttonListElem.appendChild(buttonLabelElem);
-        buttonListElem.appendChild(breakElem);
-        buttonButtonElem.onclick = function(){
-            buttonLabelElem.innerHTML = "[Press button/move axis]";
-            awaitInputToSet(1, i, buttonLabelElem);
-        }
+        createControl(1, i);
     }
-    console.log("ControlStadia: Populated button list!");
+    console.log("ControlStadia: Populated control list!");
 }
-populateButtonList();
+populateControlList();
 
 chrome.storage.sync.get([
     "firstRun"

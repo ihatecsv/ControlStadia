@@ -18,6 +18,10 @@
             .option {
                 margin-bottom: 4px;
             }
+            .control-table {
+                margin-bottom: 4px;
+                display: inline-block;
+            }
         </style>
     </head>
     <body>
@@ -37,7 +41,7 @@
                 <label for="gamepad-select">Select gamepad</label>
                 <select id="gamepad-select"></select>
             </div>
-            <div class="option" id="button-list"></div>
+            <table class="control-table" id="control-list"></table>
             <div class="option">
                 <label for="apply-button">Apply changes (causes refresh)</label>
                 <button type="button" id="apply-button">Apply</button>
