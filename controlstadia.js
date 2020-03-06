@@ -6,7 +6,7 @@ function main(){
 	}, false);
 	const setupCS = function(){
 		console.log("ControlStadia: Injected!");
-
+		console.log(config);
 		const buttonCount = 17;
 		const axisCount = 4;
 
@@ -19,7 +19,7 @@ function main(){
 			axes: [0, 0, 0, 0],
 			buttons: new Array(buttonCount).fill().map(m => ({pressed: false, touched: false, value: 0}))
 		}
-		
+
 		let indicesFound = false;
 		const findGamepadIndices = function(originalGamepads){
 			for(let i = 0; i < buttonCount; i++){
@@ -60,8 +60,8 @@ function main(){
 				const dstIndex = selectedConfigButton.dstIndex;
 				if(selectedConfigButton.dstType){ //Axis
 					const button = emulatedGamepad.buttons[i];
-					button.pressed = button.touched = originalGamepads[gamepadIndex].axes[dstIndex] !== 0;
-					button.value = originalGamepads[gamepadIndex].axes[dstIndex];
+					button.pressed = button.touched = (originalGamepads[gamepadIndex].axes[dstIndex] + selectedConfigButton.offset) !== 0;
+					button.value = (originalGamepads[gamepadIndex].axes[dstIndex] * selectedConfigButton.scale) + selectedConfigButton.offset;
 				}else{ //Button
 					emulatedGamepad.buttons[i] = originalGamepads[gamepadIndex].buttons[dstIndex];
 				}
@@ -71,7 +71,7 @@ function main(){
 				const selectedConfigAxis = config.axes[i];
 				if(typeof selectedConfigAxis.gamepadIndex === "undefined") continue;
 				const gamepadIndex = selectedConfigAxis.gamepadIndex;
-				emulatedGamepad.axes[i] = originalGamepads[gamepadIndex].axes[selectedConfigAxis.dstIndex];
+				emulatedGamepad.axes[i] = (originalGamepads[gamepadIndex].axes[selectedConfigAxis.dstIndex] * selectedConfigAxis.scale) + selectedConfigAxis.offset;
 				emulatedGamepad.timestamp = originalGamepads[gamepadIndex].timestamp;
 			}
 			return [emulatedGamepad, null, null, null];

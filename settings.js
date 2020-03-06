@@ -35,6 +35,9 @@ const buttons = [
     {label: "Home"} //16
 ]
 
+axes.forEach(function(axis){axis.scale = 0; axis.offset = 0;})
+buttons.forEach(function(button){button.scale = 0; button.offset = 0;})
+
 const populateGamepadSelect = function(){
     gamepadSelectElem.innerHTML = "";
     const gamepads = navigator.getGamepads();
@@ -86,27 +89,52 @@ const awaitInputToSet = function(srcType, srcIndex, buttonLabelElem){
 }
 
 const populateControlList = function(){
-    controlListElem.innerHTML = "";
     const createControl = function(type, index){
         const trElem = document.createElement("tr");
-
-        const controlButtonElem = document.createElement("button");
-        const controlButtonTdElem = document.createElement("td");
-        controlButtonElem.innerHTML = (type ? axes : buttons)[index].label;
-        controlButtonTdElem.appendChild(controlButtonElem);
+        const objectOfType = (type ? axes : buttons);
 
         const controlLabelElem = document.createElement("span");
         const controlLabelTdElem = document.createElement("td");
-        controlLabelElem.innerHTML = "[Unset]";
+        controlLabelElem.innerHTML = objectOfType[index].label;
         controlLabelTdElem.appendChild(controlLabelElem);
 
+        const controlButtonElem = document.createElement("button");
+        const controlButtonTdElem = document.createElement("td");
+        controlButtonElem.innerHTML = "[Unset]";
+        controlButtonTdElem.appendChild(controlButtonElem);
+
+        const controlScaleElem = document.createElement("input");
+        const controlScaleTdElem = document.createElement("td");
+        controlScaleElem.type = "number";
+        controlScaleElem.value = "0";
+        controlScaleElem.className = "small-input";
+        controlScaleTdElem.appendChild(controlScaleElem);
+
+        const controlOffsetElem = document.createElement("input");
+        const controlOffsetTdElem = document.createElement("td");
+        controlOffsetElem.type = "number";
+        controlOffsetElem.value = "0";
+        controlOffsetElem.className = "small-input";
+        controlOffsetTdElem.appendChild(controlOffsetElem);
+
+        trElem.appendChild(controlLabelTdElem);
         trElem.appendChild(controlButtonTdElem);
-        trElem.appendChild(controlLabelTdElem)
+        trElem.appendChild(controlScaleTdElem);
+        trElem.appendChild(controlOffsetTdElem);
+
         controlListElem.appendChild(trElem);
-        
+
         controlButtonElem.onclick = function(){
-            controlLabelElem.innerHTML = "[Setting...]";
-            awaitInputToSet(type, index, controlLabelElem);
+            controlButtonElem.innerHTML = "[Setting...]";
+            awaitInputToSet(type, index, controlButtonElem);
+        }
+
+        controlScaleElem.onchange = controlScaleElem.keyup = function(){
+            objectOfType[index].scale = parseFloat(controlScaleElem.value);
+        }
+
+        controlOffsetElem.onchange = controlOffsetElem.keyup = function(){
+            objectOfType[index].offset = parseFloat(controlOffsetElem.value);
         }
     }
     for(let i = 0; i < buttons.length; i++){

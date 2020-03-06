@@ -2,12 +2,9 @@
     <head>
         <style>
             body {
-                width: 200px;
+                width: 350px;
                 text-align: center;
                 margin: 0;
-            }
-            input {
-                width: 80%;
             }
             .logo-container {
                 margin-bottom: 4px;
@@ -21,6 +18,9 @@
             .control-table {
                 margin-bottom: 4px;
                 display: inline-block;
+            }
+            .small-input {
+                width: 64px;
             }
         </style>
     </head>
@@ -41,7 +41,17 @@
                 <label for="gamepad-select">Select gamepad</label>
                 <select id="gamepad-select"></select>
             </div>
-            <table class="control-table" id="control-list"></table>
+            <table class="control-table">
+                <thead>
+                    <tr>
+                        <th>Control</td>
+                        <th>Mapping</td>
+                        <th>Scale</td>
+                        <th>Offset</td>
+                    </tr>
+                </thead>
+                <tbody id="control-list"></tbody>
+            </table>
             <div class="option">
                 <label for="apply-button">Apply changes (causes refresh)</label>
                 <button type="button" id="apply-button">Apply</button>
