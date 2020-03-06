@@ -8,14 +8,14 @@ const gamepadRefreshButtonElem = document.getElementById("gamepad-refresh-button
 const gamepadSelectElem = document.getElementById("gamepad-select");
 const controlListElem = document.getElementById("control-list");
 
-const axes = [
+let axes = [
     {label: "LX"}, //0
     {label: "LY"}, //1
     {label: "RX"}, //2
     {label: "RY"}, //3
 ]
 
-const buttons = [
+let buttons = [
     {label: "A"}, //0
     {label: "B"}, //1
     {label: "X"}, //2
@@ -35,8 +35,8 @@ const buttons = [
     {label: "Home"} //16
 ]
 
-axes.forEach(function(axis){axis.scale = 0; axis.offset = 0;})
-buttons.forEach(function(button){button.scale = 0; button.offset = 0;})
+axes.forEach(function(axis){axis.scale = 1; axis.offset = 0;})
+buttons.forEach(function(button){button.scale = 1; button.offset = 0;})
 
 const populateGamepadSelect = function(){
     gamepadSelectElem.innerHTML = "";
@@ -52,13 +52,17 @@ const populateGamepadSelect = function(){
     console.log("ControlStadia: Refreshed gamepad list!");
 }
 
+const makeLabelString = function(type, index){
+    return (type ? "Axis" : "Button") + " " + index;
+}
+
 const awaitInputToSet = function(srcType, srcIndex, buttonLabelElem){
     const gamepadSelectedIndex = parseInt(gamepadSelectElem.value);
     const originalGamepadState = navigator.getGamepads()[gamepadSelectedIndex];
     const originalButtonState = originalGamepadState.buttons.slice();
     const originalAxesState = originalGamepadState.axes.slice();
     const changeFound = function(dstType, dstIndex){
-        buttonLabelElem.innerHTML = (dstType ? "Axis" : "Button") + " " + dstIndex;
+        buttonLabelElem.innerHTML = makeLabelString(dstType, dstIndex);
         (srcType ? axes : buttons)[srcIndex].dstIndex = dstIndex;
         (srcType ? axes : buttons)[srcIndex].dstType = dstType;
         (srcType ? axes : buttons)[srcIndex].dstID = originalGamepadState.id;
@@ -88,73 +92,21 @@ const awaitInputToSet = function(srcType, srcIndex, buttonLabelElem){
     }, 200);
 }
 
-const populateControlList = function(){
-    const createControl = function(type, index){
-        const trElem = document.createElement("tr");
-        const objectOfType = (type ? axes : buttons);
-
-        const controlLabelElem = document.createElement("span");
-        const controlLabelTdElem = document.createElement("td");
-        controlLabelElem.innerHTML = objectOfType[index].label;
-        controlLabelTdElem.appendChild(controlLabelElem);
-
-        const controlButtonElem = document.createElement("button");
-        const controlButtonTdElem = document.createElement("td");
-        controlButtonElem.innerHTML = "[Unset]";
-        controlButtonTdElem.appendChild(controlButtonElem);
-
-        const controlScaleElem = document.createElement("input");
-        const controlScaleTdElem = document.createElement("td");
-        controlScaleElem.type = "number";
-        controlScaleElem.value = "0";
-        controlScaleElem.className = "small-input";
-        controlScaleTdElem.appendChild(controlScaleElem);
-
-        const controlOffsetElem = document.createElement("input");
-        const controlOffsetTdElem = document.createElement("td");
-        controlOffsetElem.type = "number";
-        controlOffsetElem.value = "0";
-        controlOffsetElem.className = "small-input";
-        controlOffsetTdElem.appendChild(controlOffsetElem);
-
-        trElem.appendChild(controlLabelTdElem);
-        trElem.appendChild(controlButtonTdElem);
-        trElem.appendChild(controlScaleTdElem);
-        trElem.appendChild(controlOffsetTdElem);
-
-        controlListElem.appendChild(trElem);
-
-        controlButtonElem.onclick = function(){
-            controlButtonElem.innerHTML = "[Setting...]";
-            awaitInputToSet(type, index, controlButtonElem);
-        }
-
-        controlScaleElem.onchange = controlScaleElem.keyup = function(){
-            objectOfType[index].scale = parseFloat(controlScaleElem.value);
-        }
-
-        controlOffsetElem.onchange = controlOffsetElem.keyup = function(){
-            objectOfType[index].offset = parseFloat(controlOffsetElem.value);
-        }
-    }
-    for(let i = 0; i < buttons.length; i++){
-        createControl(0, i);
-    }
-    for(let i = 0; i < axes.length; i++){
-        createControl(1, i);
-    }
-    console.log("ControlStadia: Populated control list!");
-}
-populateControlList();
-
 chrome.storage.sync.get([
-    "firstRun"
+    "firstRun",
+    "axes",
+    "buttons"
 ], function(settings) {
 
     if(settings.firstRun){
         settingsElem.style.display = "none";
     }else{
         firstRunNotificationElem.style.display = "none";
+    }
+
+    if(typeof settings.axes !== "undefined" && typeof settings.buttons !== "undefined"){
+        axes = settings.axes;
+        buttons = settings.buttons;
     }
 
     firstRunNotificationCloseButtonElem.onclick = function(){
@@ -179,4 +131,63 @@ chrome.storage.sync.get([
     gamepadRefreshButtonElem.onclick = function(){
         populateGamepadSelect();
     }
+
+    const populateControlList = function(){
+        const createControl = function(type, index){
+            const trElem = document.createElement("tr");
+            const objectOfType = (type ? axes : buttons);
+    
+            const controlLabelElem = document.createElement("span");
+            const controlLabelTdElem = document.createElement("td");
+            controlLabelElem.innerHTML = objectOfType[index].label;
+            controlLabelTdElem.appendChild(controlLabelElem);
+    
+            const controlButtonElem = document.createElement("button");
+            const controlButtonTdElem = document.createElement("td");
+            controlButtonElem.innerHTML = typeof objectOfType[index].dstIndex !== "undefined" ? makeLabelString(objectOfType[index].dstType, objectOfType[index].dstIndex) : "[Unset]";
+            controlButtonTdElem.appendChild(controlButtonElem);
+    
+            const controlScaleElem = document.createElement("input");
+            const controlScaleTdElem = document.createElement("td");
+            controlScaleElem.type = "number";
+            controlScaleElem.value = objectOfType[index].scale;
+            controlScaleElem.className = "small-input";
+            controlScaleTdElem.appendChild(controlScaleElem);
+    
+            const controlOffsetElem = document.createElement("input");
+            const controlOffsetTdElem = document.createElement("td");
+            controlOffsetElem.type = "number";
+            controlOffsetElem.value = objectOfType[index].offset;
+            controlOffsetElem.className = "small-input";
+            controlOffsetTdElem.appendChild(controlOffsetElem);
+    
+            trElem.appendChild(controlLabelTdElem);
+            trElem.appendChild(controlButtonTdElem);
+            trElem.appendChild(controlScaleTdElem);
+            trElem.appendChild(controlOffsetTdElem);
+    
+            controlListElem.appendChild(trElem);
+    
+            controlButtonElem.onclick = function(){
+                controlButtonElem.innerHTML = "[Setting...]";
+                awaitInputToSet(type, index, controlButtonElem);
+            }
+    
+            controlScaleElem.onchange = controlScaleElem.keyup = function(){
+                objectOfType[index].scale = parseFloat(controlScaleElem.value);
+            }
+    
+            controlOffsetElem.onchange = controlOffsetElem.keyup = function(){
+                objectOfType[index].offset = parseFloat(controlOffsetElem.value);
+            }
+        }
+        for(let i = 0; i < buttons.length; i++){
+            createControl(0, i);
+        }
+        for(let i = 0; i < axes.length; i++){
+            createControl(1, i);
+        }
+        console.log("ControlStadia: Populated control list!");
+    }
+    populateControlList();
 });

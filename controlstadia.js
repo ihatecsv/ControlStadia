@@ -61,7 +61,7 @@ function main(){
 				if(selectedConfigButton.dstType){ //Axis
 					const button = emulatedGamepad.buttons[i];
 					button.pressed = button.touched = (originalGamepads[gamepadIndex].axes[dstIndex] + selectedConfigButton.offset) !== 0;
-					button.value = (originalGamepads[gamepadIndex].axes[dstIndex] * selectedConfigButton.scale) + selectedConfigButton.offset;
+					button.value = Math.min(Math.max((originalGamepads[gamepadIndex].axes[dstIndex] * selectedConfigButton.scale) + selectedConfigButton.offset, -1), 1);
 				}else{ //Button
 					emulatedGamepad.buttons[i] = originalGamepads[gamepadIndex].buttons[dstIndex];
 				}
@@ -71,7 +71,7 @@ function main(){
 				const selectedConfigAxis = config.axes[i];
 				if(typeof selectedConfigAxis.gamepadIndex === "undefined") continue;
 				const gamepadIndex = selectedConfigAxis.gamepadIndex;
-				emulatedGamepad.axes[i] = (originalGamepads[gamepadIndex].axes[selectedConfigAxis.dstIndex] * selectedConfigAxis.scale) + selectedConfigAxis.offset;
+				emulatedGamepad.axes[i] = Math.min(Math.max((originalGamepads[gamepadIndex].axes[selectedConfigAxis.dstIndex] * selectedConfigAxis.scale) + selectedConfigAxis.offset, -1), 1);
 				emulatedGamepad.timestamp = originalGamepads[gamepadIndex].timestamp;
 			}
 			return [emulatedGamepad, null, null, null];
