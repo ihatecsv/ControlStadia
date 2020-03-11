@@ -1,7 +1,7 @@
 {
 	"name": "ControlStadia",
 	"version": "0.0.1",
-	"description": "ControlStadia is a Chrome Extension which allows arbitrary mapping of input devices to a \"standard\" virtual input controller which works with Stadia!",
+	"description": "ControlStadia allows arbitrary mapping of input devices to a \"standard\" virtual input controller which works with Stadia!",
 	"background": {
 		"scripts": ["background.js"],
 		"persistent": false
