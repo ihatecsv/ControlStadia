@@ -40,37 +40,39 @@
         <div id="finding-joysticks">
             Finding joysticks...
         </div>
-        <div id="joystick-settings" style="display: none;">
-            <div class="option">
-                <button type="button" id="gamepad-refresh-button">Refresh gamepads</button>
+        <div id="settings">
+            <div id="joystick-settings" style="display: none;">
+                <div class="option">
+                    <button type="button" id="gamepad-refresh-button">Refresh gamepads</button>
+                </div>
+                <div class="option">
+                    <label for="gamepad-select">Select target gamepad</label>
+                    <select id="gamepad-select"></select>
+                </div>
+                <table class="control-table">
+                    <thead>
+                        <tr>
+                            <th>Control</td>
+                            <th>Mapping</td>
+                            <th>Scale</td>
+                            <th>Offset</td>
+                        </tr>
+                    </thead>
+                    <tbody id="control-list"></tbody>
+                </table>
             </div>
             <div class="option">
-                <label for="gamepad-select">Select target gamepad</label>
-                <select id="gamepad-select"></select>
+                <label for="disable-controlstadia">Disable ControlStadia</label>
+                <input type="checkbox" id="disable-controlstadia">
             </div>
-            <table class="control-table">
-                <thead>
-                    <tr>
-                        <th>Control</td>
-                        <th>Mapping</td>
-                        <th>Scale</td>
-                        <th>Offset</td>
-                    </tr>
-                </thead>
-                <tbody id="control-list"></tbody>
-            </table>
-        </div>
-        <div class="option">
-            <label for="disable-controlstadia">Disable ControlStadia</label>
-            <input type="checkbox" id="disable-controlstadia">
-        </div>
-        <div class="option">
-            <label for="apply-button">Apply changes (causes refresh)</label>
-            <button type="button" id="apply-button">Apply</button>
-        </div>
-        <div class="option">
-            <label for="reset-button">Reset settings (causes refresh)</label>
-            <button type="button" id="reset-button">Reset</button>
+            <div class="option">
+                <label for="apply-button">Apply changes (causes refresh)</label>
+                <button type="button" id="apply-button">Apply</button>
+            </div>
+            <div class="option">
+                <label for="reset-button">Reset settings (causes refresh)</label>
+                <button type="button" id="reset-button">Reset</button>
+            </div>
         </div>
         <script src="settings.js"></script>
     </body>

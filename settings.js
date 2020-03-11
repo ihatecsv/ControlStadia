@@ -2,6 +2,7 @@ document.getElementById("version").innerText = chrome.runtime.getManifest().vers
 
 const firstRunNotificationElem = document.getElementById("first-run-notification");
 const firstRunNotificationCloseButtonElem = document.getElementById("first-run-notification-close-button");
+const settingsElem = document.getElementById("settings");
 const joystickSettingsElem = document.getElementById("joystick-settings");
 const applyButtonElem = document.getElementById("apply-button");
 const resetButtonElem = document.getElementById("reset-button");
@@ -127,7 +128,7 @@ chrome.storage.sync.get([
     disableControlStadiaElem.checked = settings.disableControlStadia;
 
     if(settings.firstRun){
-        joystickSettingsElem.style.display = "none";
+        settingsElem.style.display = "none";
     }else{
         firstRunNotificationElem.style.display = "none";
     }
@@ -139,7 +140,7 @@ chrome.storage.sync.get([
 
     firstRunNotificationCloseButtonElem.onclick = function(){
         firstRunNotificationElem.style.display = "none";
-        joystickSettingsElem.style.display = "initial";
+        settingsElem.style.display = "initial";
         chrome.storage.sync.set({"firstRun": false}, function(){
             console.log("ControlStadia: First run completed!");
         });
@@ -166,6 +167,7 @@ chrome.storage.sync.get([
         chrome.storage.sync.clear();
         resetAxesAndButtons();
         chrome.tabs.reload();
+        window.location.href = window.location.href;
         console.log("TouchStadia: Reset button config!");
     }
 
