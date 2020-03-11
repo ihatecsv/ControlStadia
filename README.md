@@ -13,7 +13,7 @@ With ControlStadia, you can:
 [![Demo video](https://img.youtube.com/vi/cgsf7KFBqUY/0.jpg)](https://www.youtube.com/watch?v=cgsf7KFBqUY)
 
 ## Usage
-Simply install the extension and open or refresh Stadia! Click the extension icon to configure your virtual joypad.
+Simply install the extension (pending review on Chrome Web Store) and open or refresh Stadia! Click the extension icon to configure your virtual joypad.
 
 Once the extension menu is open, it should automatically look for any joysticks plugged into your PC. If none show up, try pressing a button or moving a stick on one.
 
