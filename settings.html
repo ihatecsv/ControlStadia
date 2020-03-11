@@ -22,6 +22,10 @@
             .small-input {
                 width: 64px;
             }
+            .map-button-disabled {
+                pointer-events: none;
+                background-color: #aaa;
+            }
         </style>
     </head>
     <body>
@@ -33,7 +37,10 @@
             If you already have Stadia open, you must refresh the window before ControlStadia will function.
             <button type="button" id="first-run-notification-close-button">I understand</button>
         </div>
-        <div id="settings">
+        <div id="finding-joysticks">
+            Finding joysticks...
+        </div>
+        <div id="joystick-settings" style="display: none;">
             <div class="option">
                 <button type="button" id="gamepad-refresh-button">Refresh gamepads</button>
             </div>
@@ -52,10 +59,18 @@
                 </thead>
                 <tbody id="control-list"></tbody>
             </table>
-            <div class="option">
-                <label for="apply-button">Apply changes (causes refresh)</label>
-                <button type="button" id="apply-button">Apply</button>
-            </div>
+        </div>
+        <div class="option">
+            <label for="disable-controlstadia">Disable ControlStadia</label>
+            <input type="checkbox" id="disable-controlstadia">
+        </div>
+        <div class="option">
+            <label for="apply-button">Apply changes (causes refresh)</label>
+            <button type="button" id="apply-button">Apply</button>
+        </div>
+        <div class="option">
+            <label for="reset-button">Reset settings (causes refresh)</label>
+            <button type="button" id="reset-button">Reset</button>
         </div>
         <script src="settings.js"></script>
     </body>

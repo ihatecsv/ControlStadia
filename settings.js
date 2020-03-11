@@ -2,20 +2,23 @@ document.getElementById("version").innerText = chrome.runtime.getManifest().vers
 
 const firstRunNotificationElem = document.getElementById("first-run-notification");
 const firstRunNotificationCloseButtonElem = document.getElementById("first-run-notification-close-button");
-const settingsElem = document.getElementById("settings");
+const joystickSettingsElem = document.getElementById("joystick-settings");
 const applyButtonElem = document.getElementById("apply-button");
+const resetButtonElem = document.getElementById("reset-button");
 const gamepadRefreshButtonElem = document.getElementById("gamepad-refresh-button");
 const gamepadSelectElem = document.getElementById("gamepad-select");
 const controlListElem = document.getElementById("control-list");
+const disableControlStadiaElem = document.getElementById("disable-controlstadia");
+const findingJoysticksElem = document.getElementById("finding-joysticks");
 
-let axes = [
+let axesDefault = [
     {label: "LX"}, //0
     {label: "LY"}, //1
     {label: "RX"}, //2
     {label: "RY"}, //3
 ]
 
-let buttons = [
+let buttonsDefault = [
     {label: "A"}, //0
     {label: "B"}, //1
     {label: "X"}, //2
@@ -35,11 +38,21 @@ let buttons = [
     {label: "Home"} //16
 ]
 
-axes.forEach(function(axis){axis.scale = 1; axis.offset = 0;})
-buttons.forEach(function(button){button.scale = 1; button.offset = 0;})
+axesDefault.forEach(function(axis){axis.scale = 1; axis.offset = 0;})
+buttonsDefault.forEach(function(button){button.scale = 1; button.offset = 0;})
+
+let axes;
+let buttons;
+
+const resetAxesAndButtons = function(){
+    axes = axesDefault.slice();
+    buttons = buttonsDefault.slice();
+}
+resetAxesAndButtons();
 
 const populateGamepadSelect = function(){
     gamepadSelectElem.innerHTML = "";
+    let gamepadFound = false;
     const gamepads = navigator.getGamepads();
     for(let i = 0; i < gamepads.length; i++){
         if(gamepads[i] !== null){
@@ -47,7 +60,19 @@ const populateGamepadSelect = function(){
             optionElem.value = gamepads[i].index;
             optionElem.innerText = gamepads[i].id;
             gamepadSelectElem.add(optionElem);
+            gamepadFound = true;
         }
+    }
+    if(gamepadFound){
+        joystickSettingsElem.style.display = "initial";
+        findingJoysticksElem.style.display = "none";
+        const mapButtons = document.querySelectorAll(".map-button-disabled");
+        for(let i = 0; i < mapButtons.length; i++){
+            console.log(mapButtons[i].innerText);
+            mapButtons[i].classList.remove("map-button-disabled");
+        }
+    }else{
+        setTimeout(populateGamepadSelect, 500);
     }
     console.log("ControlStadia: Refreshed gamepad list!");
 }
@@ -95,11 +120,14 @@ const awaitInputToSet = function(srcType, srcIndex, buttonLabelElem){
 chrome.storage.sync.get([
     "firstRun",
     "axes",
-    "buttons"
+    "buttons",
+    "disableControlStadia"
 ], function(settings) {
 
+    disableControlStadiaElem.checked = settings.disableControlStadia;
+
     if(settings.firstRun){
-        settingsElem.style.display = "none";
+        joystickSettingsElem.style.display = "none";
     }else{
         firstRunNotificationElem.style.display = "none";
     }
@@ -111,7 +139,7 @@ chrome.storage.sync.get([
 
     firstRunNotificationCloseButtonElem.onclick = function(){
         firstRunNotificationElem.style.display = "none";
-        settingsElem.style.display = "initial";
+        joystickSettingsElem.style.display = "initial";
         chrome.storage.sync.set({"firstRun": false}, function(){
             console.log("ControlStadia: First run completed!");
         });
@@ -120,7 +148,8 @@ chrome.storage.sync.get([
     applyButtonElem.onclick = function(){
         const options = {
             axes: axes,
-            buttons: buttons
+            buttons: buttons,
+            disableControlStadia: disableControlStadiaElem.checked
         };
         chrome.storage.sync.set(options, function(){
             console.log("ControlStadia: Set options!");
@@ -130,6 +159,14 @@ chrome.storage.sync.get([
 
     gamepadRefreshButtonElem.onclick = function(){
         populateGamepadSelect();
+    }
+    populateGamepadSelect();
+
+    resetButtonElem.onclick = function(){
+        chrome.storage.sync.clear();
+        resetAxesAndButtons();
+        chrome.tabs.reload();
+        console.log("TouchStadia: Reset button config!");
     }
 
     const populateControlList = function(){
@@ -145,6 +182,7 @@ chrome.storage.sync.get([
             const controlButtonElem = document.createElement("button");
             const controlButtonTdElem = document.createElement("td");
             controlButtonElem.innerHTML = typeof objectOfType[index].dstIndex !== "undefined" ? makeLabelString(objectOfType[index].dstType, objectOfType[index].dstIndex) : "[Unset]";
+            controlButtonElem.className = "map-button-disabled";
             controlButtonTdElem.appendChild(controlButtonElem);
     
             const controlScaleElem = document.createElement("input");
