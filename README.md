@@ -6,10 +6,10 @@ ControlStadia is a Chrome Extension which allows arbitrary mapping of input devi
 
 With ControlStadia, you can:
 
-* Use a steering wheel and pedals to play racing games! (or a yoke, though I do not recommend, lol)
-* Map up to four physical controllers to a single virtual controller!
-* Remap a single controller however you'd like!
-* In general, use any input device which is recognized by the Gamepad API to play games on Stadia!
+* Map up to four physical gamepads to a single "standard" virtual gamepad which works with Stadia.
+* Scale and offset axis to increase or decrease sensitivity, change axis ranges.
+* Do normal things like playing GRID with a steering wheel and pedals!
+* Do ridiculous things like playing Borderlands 3 with a flight yoke and throttle quadrant!
 
 ## Demo
 [![Demo video](https://img.youtube.com/vi/cgsf7KFBqUY/0.jpg)](https://www.youtube.com/watch?v=cgsf7KFBqUY)
