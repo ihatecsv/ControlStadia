@@ -1,5 +1,7 @@
 ![ControlStadia logo](/img/cs-128.png?raw=true "ControlStadia logo")
 # ControlStadia
+[![ControlStadia in Chrome Web Store](https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_206x58.png)](https://chrome.google.com/webstore/detail/controlstadia/faodiopjdcjfeflfmeadfkgodcbioejp)
+
 ControlStadia is a Chrome Extension which allows arbitrary mapping of input devices to a "standard" virtual input controller which works with Stadia!
 
 With ControlStadia, you can:
@@ -13,7 +15,7 @@ With ControlStadia, you can:
 [![Demo video](https://img.youtube.com/vi/cgsf7KFBqUY/0.jpg)](https://www.youtube.com/watch?v=cgsf7KFBqUY)
 
 ## Usage
-Simply install the extension (pending review on Chrome Web Store) and open or refresh Stadia! Click the extension icon to configure your virtual joypad.
+Simply [install the extension](https://chrome.google.com/webstore/detail/controlstadia/faodiopjdcjfeflfmeadfkgodcbioejp) and open or refresh Stadia! Click the extension icon to configure your virtual joypad.
 
 Once the extension menu is open, it should automatically look for any joysticks plugged into your PC. If none show up, try pressing a button or moving a stick on one.
 
