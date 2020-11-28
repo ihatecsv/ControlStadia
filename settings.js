@@ -109,7 +109,8 @@ const awaitInputToSet = function(srcType, srcIndex, buttonLabelElem){
             }
         }
         for(let i = 0; i < originalAxesState.length; i++){
-            if(currentAxesState[i] !== originalAxesState[i]){
+            if(currentAxesState[i] >= originalAxesState[i] + 0.5 ||
+                currentAxesState[i] <= originalAxesState[i] - 0.5){
                 changeFound(1, i);
                 clearInterval(checkInterval);
                 break;
