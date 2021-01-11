@@ -1,6 +1,6 @@
 ![ControlStadia logo](/img/cs-128.png?raw=true "ControlStadia logo")
 # ControlStadia
-[![ControlStadia in Chrome Web Store](https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_206x58.png)](https://chrome.google.com/webstore/detail/controlstadia/faodiopjdcjfeflfmeadfkgodcbioejp)
+[ControlStadia in Chrome Web Store](https://chrome.google.com/webstore/detail/controlstadia/faodiopjdcjfeflfmeadfkgodcbioejp)
 
 ControlStadia is a Chrome Extension which allows arbitrary mapping of input devices to a "standard" virtual input controller which works with Stadia!
 
@@ -25,7 +25,7 @@ The "Scale" field will multiply input by the factor specified. For example, sett
 
 The "Offset" field will add a constant value to the input.
 
-ControlStadia has manifest permissions to run on [html5gamepad.com](https://html5gamepad.com), where you can view the output values of the virtual controller. I highly recommend setting up your virtual controller while on this page!
+ControlStadia has manifest permissions to run on [gamepad-tester.com](https://gamepad-tester.com), where you can view the output values of the virtual controller. I highly recommend setting up your virtual controller while on this page!
 
 ### Scale and offset example
 Say you're trying to map <kbd>R2</kbd> to a controller axis that ranges from `[-1, 1]`. Because <kbd>R2</kbd> expects a value in the range `[0, 1]`, we must both scale and offset the axis. In this case, the scale would be `0.5` (changing the range to `[-0.5, 0.5]`) and the offset would be `0.5`, (changing the range to `[0, 1]`).
