@@ -1,6 +1,6 @@
 {
 	"name": "ControlStadia",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "ControlStadia allows arbitrary mapping of input devices to a \"standard\" virtual input controller which works with Stadia!",
 	"background": {
 		"scripts": ["background.js"],
