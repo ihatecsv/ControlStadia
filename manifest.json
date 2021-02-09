@@ -19,7 +19,8 @@
 		{
 			"matches": [
 				"https://stadia.google.com/*",
-				"https://gamepad-tester.com/*"
+				"https://gamepad-tester.com/*",
+				"https://gamepad.e7d.io/*"
 			],
 			"js": ["controlstadia.js"],
 			"run_at": "document_start"
