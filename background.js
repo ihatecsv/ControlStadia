@@ -8,6 +8,9 @@ chrome.runtime.onInstalled.addListener(function() {
                 new chrome.declarativeContent.PageStateMatcher({
                     pageUrl: {hostEquals: "gamepad-tester.com"},
                 }),
+                new chrome.declarativeContent.PageStateMatcher({
+                    pageUrl: {hostEquals: "www.xbox.com"},
+                }),
             ],
             actions: [new chrome.declarativeContent.ShowPageAction()]
         }]);

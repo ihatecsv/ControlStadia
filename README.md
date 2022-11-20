@@ -27,6 +27,9 @@ The "Offset" field will add a constant value to the input.
 
 ControlStadia has manifest permissions to run on [gamepad-tester.com](https://gamepad-tester.com), where you can view the output values of the virtual controller. I highly recommend setting up your virtual controller while on this page!
 
+## Xbox cloud support
+This extension can also be used on Xbox Cloud, but at the moment it is primarily builded for Stadia.
+
 ### Scale and offset example
 Say you're trying to map <kbd>R2</kbd> to a controller axis that ranges from `[-1, 1]`. Because <kbd>R2</kbd> expects a value in the range `[0, 1]`, we must both scale and offset the axis. In this case, the scale would be `0.5` (changing the range to `[-0.5, 0.5]`) and the offset would be `0.5`, (changing the range to `[0, 1]`).
 
@@ -41,4 +44,4 @@ All pull requests are welcome! Please feel free to improve ControlStadia as you 
 
 
 ## Disclaimer
-ControlStadia is not affiliated, associated, authorized, endorsed by, or in any way officially connected with Stadia, Google LLC, Alphabet Inc., or any of their subsidiaries or affiliates.
+ControlStadia is not affiliated, associated, authorized, endorsed by, or in any way officially connected with Stadia, Google LLC, Alphabet Inc., Xbox Cloud, Xbox, Microsoft or any of their subsidiaries or affiliates.
