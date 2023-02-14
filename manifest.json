@@ -18,9 +18,21 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"https://stadia.google.com/*",
 				"https://gamepad-tester.com/*",
-				"https://www.xbox.com/*"
+				"https://gamepad.e7d.io/*",
+				"https://cloud.boosteroid.com/*",
+				"https://www.xbox.com/*",
+				"https://play.geforcenow.com/*",
+				"https://shadow.tech/*",
+				"https://www.paperspace.com/*",
+				"https://parsec.app/*",
+				"https://www.nvidia.com/*",
+				"https://playkey.net/*",
+				"https://www.netboom.com/*",
+				"https://www.blacknut.com/*",
+				"https://www.furioos.com/*",
+				"https://luna.amazon.com/*",
+				"https://stadia.google.com/*"
 			],
 			"js": ["controlstadia.js"],
 			"run_at": "document_start"

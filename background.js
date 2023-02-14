@@ -2,16 +2,26 @@ chrome.runtime.onInstalled.addListener(function() {
     chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
         chrome.declarativeContent.onPageChanged.addRules([{
             conditions: [
-                new chrome.declarativeContent.PageStateMatcher({
-                    pageUrl: {hostEquals: "stadia.google.com"},
-                }),
-                new chrome.declarativeContent.PageStateMatcher({
-                    pageUrl: {hostEquals: "gamepad-tester.com"},
-                }),
-                new chrome.declarativeContent.PageStateMatcher({
-                    pageUrl: {hostEquals: "www.xbox.com"},
-                }),
-            ],
+				"gamepad-tester.com",
+				"gamepad.e7d.io",
+				"cloud.boosteroid.com",
+                "www.xbox.com",
+                "play.geforcenow.com",
+				"shadow.tech",
+				"www.paperspace.com",
+				"parsec.app",
+				"www.nvidia.com",
+				"playkey.net",
+				"www.netboom.com",
+				"www.blacknut.com",
+				"www.furioos.com",
+				"luna.amazon.com",
+                "stadia.google.com"
+            ].map(hostEquals => (
+                [new chrome.declarativeContent.PageStateMatcher({
+                        pageUrl: {hostEquals},
+                })]
+            )),
             actions: [new chrome.declarativeContent.ShowPageAction()]
         }]);
     });
