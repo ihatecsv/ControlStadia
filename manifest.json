@@ -1,6 +1,6 @@
 {
 	"name": "ControlStadia",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "ControlStadia allows arbitrary mapping of input devices to a \"standard\" virtual input controller which works with Stadia!",
 	"background": {
 		"scripts": ["background.js"],
@@ -18,8 +18,21 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"https://stadia.google.com/*",
-				"https://gamepad-tester.com/*"
+				"https://gamepad-tester.com/*",
+				"https://gamepad.e7d.io/*",
+				"https://cloud.boosteroid.com/*",
+				"https://www.xbox.com/*",
+				"https://play.geforcenow.com/*",
+				"https://shadow.tech/*",
+				"https://www.paperspace.com/*",
+				"https://parsec.app/*",
+				"https://www.nvidia.com/*",
+				"https://playkey.net/*",
+				"https://www.netboom.com/*",
+				"https://www.blacknut.com/*",
+				"https://www.furioos.com/*",
+				"https://luna.amazon.com/*",
+				"https://stadia.google.com/*"
 			],
 			"js": ["controlstadia.js"],
 			"run_at": "document_start"
